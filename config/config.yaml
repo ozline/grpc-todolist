@@ -1,0 +1,30 @@
+server:
+  jwt-secret: ozline
+  version: 1.0
+  name: todolist
+
+snowflake:
+  worker-id: 0
+  datancenter-id: 0
+
+services:
+  api:
+    name: api
+    addr: 127.0.0.1:10001
+  user:
+    name: user
+    addr: 127.0.0.1:10002
+  task:
+    name: task
+    addr: 127.0.0.1:10003
+
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  database: todolist
+  username: todolist
+  password: todolist
+  charset: utf8mb4
+
+etcd:
+  addr: 127.0.0.1:2379
