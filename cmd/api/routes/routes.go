@@ -6,7 +6,7 @@ import (
 	"github.com/ozline/grpc-todolist/cmd/api/middleware"
 )
 
-func NewRouter(service ...interface{}) *gin.Engine {
+func NewRouter() *gin.Engine {
 	r := gin.Default()
 
 	r.GET("/ping", handler.Ping)

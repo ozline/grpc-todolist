@@ -31,39 +31,33 @@ func Init() {
 
 	defer Register.Close()
 
-	initUserClient()
-	initTaskClient()
+	initClient(viper.GetString("services.user.name"), &UserClient)
+	initClient(viper.GetString("services.task.name"), &TaskClient)
+
 }
 
-func Connect(serviceName string) (conn *grpc.ClientConn, err error) {
+func initClient(serviceName string, client interface{}) {
+	conn, err := connectServer(serviceName)
+
+	if err != nil {
+		panic(err)
+	}
+
+	switch c := client.(type) {
+	case *user.UserServiceClient:
+		*c = user.NewUserServiceClient(conn)
+	case *task.TaskServiceClient:
+		*c = task.NewTaskServiceClient(conn)
+	default:
+		panic("unsupported client type")
+	}
+}
+
+func connectServer(serviceName string) (conn *grpc.ClientConn, err error) {
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
 	addr := fmt.Sprintf("%s:///%s", Register.Scheme(), serviceName)
 	conn, err = grpc.DialContext(ctx, addr, opts...)
 	return
-}
-
-func initUserClient() {
-	serviceName := viper.GetString("services.user.name")
-
-	connUser, err := Connect(serviceName)
-
-	if err != nil {
-		panic(err)
-	}
-
-	UserClient = user.NewUserServiceClient(connUser)
-}
-
-func initTaskClient() {
-	serviceName := viper.GetString("services.task.name")
-
-	connTask, err := Connect(serviceName)
-
-	if err != nil {
-		panic(err)
-	}
-
-	TaskClient = task.NewTaskServiceClient(connTask)
 }
