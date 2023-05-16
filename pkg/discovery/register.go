@@ -107,6 +107,7 @@ func (r *Register) keepAlive() {
 	for {
 		select {
 		case <-r.closeCh:
+			ticker.Stop()
 			if err := r.unregister(); err != nil {
 				r.logger.Error("unregister failed, error: ", err)
 			}
