@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"net/http"
 	"time"
@@ -8,6 +9,7 @@ import (
 	"github.com/ozline/grpc-todolist/cmd/api/routes"
 	"github.com/ozline/grpc-todolist/cmd/api/rpc"
 	"github.com/ozline/grpc-todolist/config"
+	"github.com/ozline/grpc-todolist/pkg/utils"
 	"github.com/spf13/viper"
 )
 
@@ -31,6 +33,10 @@ func main() {
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
+
+	go utils.ListenSignal(func() {
+		server.Shutdown(context.TODO())
+	})
 
 	err := server.ListenAndServe()
 
