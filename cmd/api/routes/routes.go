@@ -26,5 +26,14 @@ func NewRouter() *gin.Engine {
 		task.POST("/delete", handler.TaskDelete)
 	}
 
+	// 实验性功能，实现了grpc的Stream传输
+	experimental := r.Group("/experimental")
+	{
+		experimental.GET("/ping", handler.StreamPing)
+		experimental.POST("/client-stream", handler.ClientStream)
+		experimental.POST("/server-stream", handler.ServerStream)
+		experimental.POST("/bidirectional-stream", handler.BidirectionalStream)
+	}
+
 	return r
 }

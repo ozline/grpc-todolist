@@ -17,6 +17,9 @@ services:
   task:
     name: task
     addr: 127.0.0.1:10003
+  experimental:
+    name: experimental
+    addr: 127.0.0.1:10004
 
 mysql:
   addr: 127.0.0.1:3306

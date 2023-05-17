@@ -1,11 +1,12 @@
 # grpc-todolist
 
 ## 运行
+对于任何模块，请在不同的Terminal中运行
 ```bash
 make env-up     # 启动环境
 make user       # 启动用户摸块
 make task       # 启动任务模块
-make api        # 启动网关
+make api        # 启动网关模块
 ```
 
 ## 测试
@@ -79,10 +80,23 @@ make api        # 启动网关
 
 ## 指令列表
 ```bash
-make env-up     # 启动环境
-make env-down   # 结束环境
-make proto      # 更新protoc
-make user       # 启动用户摸块
-make task       # 启动任务模块
-make api        # 启动网关
+make env-up         # 启动环境
+make env-down       # 结束环境
+make proto          # 更新protoc
+make user           # 启动用户摸块
+make task           # 启动任务模块
+make experimental   # 启动实验模块
+make api            # 启动网关
 ```
+
+## 实验性功能
+在`./cmd`中，可以发现`experimental`的rpc服务端源代码，它包含以下方法
+```proto
+service ExperimentalService {
+    rpc Ping                (Request)        returns (Response) {}          // Unary请求
+    rpc ClientStream        (stream Request) returns (Response) {}          // 客户端发送流式请求
+    rpc ServerStream        (Request)        returns (stream Response) {}   // 服务端回复流式请求
+    rpc BidirectionalStream (stream Request) returns (stream Response) {}   // 双向流式请求
+}
+```
+我们可以在这个实验性模块中探索gRPC的Stream请求特性

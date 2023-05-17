@@ -3,7 +3,7 @@ DIR = $(shell pwd)/cmd
 CONFIG_PATH = $(shell pwd)/config
 IDL_PATH = $(shell pwd)/idl
 
-SERVICES := api user task
+SERVICES := api user task experimental
 service = $(word 1, $@)
 
 BIN = $(shell pwd)/bin

@@ -1,0 +1,19 @@
+syntax = "proto3";
+option go_package = "experimental/";
+
+package experimental;
+
+service ExperimentalService {
+    rpc Ping                (Request)        returns (Response) {}
+    rpc ClientStream        (stream Request) returns (Response) {}
+    rpc ServerStream        (Request)        returns (stream Response) {}
+    rpc BidirectionalStream (stream Request) returns (stream Response) {}
+}
+
+message Request {
+    string ping = 1;
+}
+
+message Response {
+    string pong = 1;
+}

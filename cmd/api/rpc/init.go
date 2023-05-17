@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/ozline/grpc-todolist/config"
+	"github.com/ozline/grpc-todolist/idl/pb/experimental"
 	"github.com/ozline/grpc-todolist/idl/pb/task"
 	"github.com/ozline/grpc-todolist/idl/pb/user"
 	"github.com/ozline/grpc-todolist/pkg/discovery"
@@ -20,13 +21,15 @@ var (
 	ctx        context.Context
 	CancelFunc context.CancelFunc
 
-	UserClient user.UserServiceClient
-	TaskClient task.TaskServiceClient
+	UserClient         user.UserServiceClient
+	TaskClient         task.TaskServiceClient
+	ExperimentalClient experimental.ExperimentalServiceClient
 )
 
 const (
-	userSrvName = "user"
-	taskSrvName = "task"
+	userSrvName         = "user"
+	taskSrvName         = "task"
+	experimentalSrvName = "experimental"
 )
 
 func Init() {
@@ -38,7 +41,7 @@ func Init() {
 
 	initClient(config.GetService(userSrvName).Name, &UserClient)
 	initClient(config.GetService(taskSrvName).Name, &TaskClient)
-
+	initClient(config.GetService(experimentalSrvName).Name, &ExperimentalClient)
 }
 
 func initClient(serviceName string, client interface{}) {
@@ -53,6 +56,8 @@ func initClient(serviceName string, client interface{}) {
 		*c = user.NewUserServiceClient(conn)
 	case *task.TaskServiceClient:
 		*c = task.NewTaskServiceClient(conn)
+	case *experimental.ExperimentalServiceClient:
+		*c = experimental.NewExperimentalServiceClient(conn)
 	default:
 		panic("unsupported client type")
 	}

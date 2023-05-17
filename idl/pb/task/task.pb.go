@@ -25,19 +25,12 @@ type Task struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// @inject_tag: json:"id"
-	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	// @inject_tag: json:"user_id"
-	UserId int64 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	// @inject_tag: json:"status"
-	Status int64 `protobuf:"varint,3,opt,name=status,proto3" json:"status,omitempty"`
-	// @inject_tag: json:"title"
-	Title string `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
-	// @inject_tag: json:"content"
-	Content string `protobuf:"bytes,5,opt,name=content,proto3" json:"content,omitempty"`
-	// @inject_tag: json:"start_at"
+	Id        int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId    int64  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Status    int64  `protobuf:"varint,3,opt,name=status,proto3" json:"status,omitempty"`
+	Title     string `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
+	Content   string `protobuf:"bytes,5,opt,name=content,proto3" json:"content,omitempty"`
 	CreatedAt string `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	// @inject_tag: json:"update_at"
 	UpdatedAt string `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 }
 

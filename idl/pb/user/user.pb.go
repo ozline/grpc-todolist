@@ -25,9 +25,7 @@ type User struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// @inject_tag: json:"user_id"
-	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	// @inject_tag: json:"user_name"
+	Id       int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Username string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
 }
 
