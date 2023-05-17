@@ -12,9 +12,12 @@ var (
 	Snowflake *snowflake
 	Service   *service
 	Etcd      *etcd
+
+	servnum int = 0
 )
 
-func Init(path string, service string) {
+func Init(path string, service string, node int) {
+	servnum = node
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(path)
 	if err := viper.ReadInConfig(); err != nil {
@@ -47,8 +50,15 @@ func configMapping(srv string) {
 }
 
 func GetService(srvname string) *service {
+
+	addrlist := viper.GetStringSlice("services." + srvname + ".addr")
+
+	if servnum >= len(addrlist) {
+		log.Fatalf("service [%s] node number %d out of range", srvname, servnum)
+	}
+
 	return &service{
 		Name: viper.GetString("services." + srvname + ".name"),
-		Addr: viper.GetString("services." + srvname + ".addr"),
+		Addr: addrlist[servnum],
 	}
 }

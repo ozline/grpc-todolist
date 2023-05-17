@@ -13,10 +13,16 @@ import (
 	"github.com/ozline/grpc-todolist/pkg/utils"
 )
 
+var (
+	path   *string
+	srvnum *int
+)
+
 func Init() {
-	path := flag.String("config", "./config", "config path")
+	path = flag.String("config", "./config", "config path")
+	srvnum = flag.Int("srvnum", 0, "node number")
 	flag.Parse()
-	config.Init(*path, srvname)
+	config.Init(*path, srvname, *srvnum)
 
 	rpc.Init()
 }

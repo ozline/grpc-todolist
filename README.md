@@ -3,11 +3,13 @@
 ## 运行
 对于任何模块，请在不同的Terminal中运行
 ```bash
-make env-up     # 启动环境
-make user       # 启动用户摸块
-make task       # 启动任务模块
-make api        # 启动网关模块
+make env-up         # 启动环境
+make user           # 启动用户摸块
+make task           # 启动任务模块
+make experimental   # 启动实验性模块
+make api            # 启动网关
 ```
+如果只想体验基础功能，可以不运行实验性模块
 
 ## 测试
 在`Postman`中导入`./postman`文件夹下的配置即可
@@ -15,6 +17,17 @@ make api        # 启动网关模块
 - `host`: 网关地址
 - `token`: 鉴权
 
+## 实验性功能
+在`./cmd`中，可以发现`experimental`的rpc服务端源代码，它包含以下方法
+```proto
+service ExperimentalService {
+    rpc Ping                (Request)        returns (Response) {}          // Unary请求
+    rpc ClientStream        (stream Request) returns (Response) {}          // 客户端发送流式请求
+    rpc ServerStream        (Request)        returns (stream Response) {}   // 服务端回复流式请求
+    rpc BidirectionalStream (stream Request) returns (stream Response) {}   // 双向流式请求
+}
+```
+我们可以在该实验性模块中探索grpc的stream特性
 ## 项目结构
 ### 整体
 ```
@@ -89,14 +102,7 @@ make experimental   # 启动实验模块
 make api            # 启动网关
 ```
 
-## 实验性功能
-在`./cmd`中，可以发现`experimental`的rpc服务端源代码，它包含以下方法
-```proto
-service ExperimentalService {
-    rpc Ping                (Request)        returns (Response) {}          // Unary请求
-    rpc ClientStream        (stream Request) returns (Response) {}          // 客户端发送流式请求
-    rpc ServerStream        (Request)        returns (stream Response) {}   // 服务端回复流式请求
-    rpc BidirectionalStream (stream Request) returns (stream Response) {}   // 双向流式请求
-}
+在启动模块时，我们支持指定监听地址的序号，只需要在`config.yaml`中对模块设置多个监听地址，同时运行时添加`node`参数即可
+```bash
+make user node=0 # 运行user模块的第0个地址
 ```
-我们可以在这个实验性模块中探索gRPC的Stream请求特性

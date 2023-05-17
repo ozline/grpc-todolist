@@ -6,6 +6,9 @@ IDL_PATH = $(shell pwd)/idl
 SERVICES := api user task experimental
 service = $(word 1, $@)
 
+# node is the node number of the service
+node = 0
+
 BIN = $(shell pwd)/bin
 
 .PHONY: proto
@@ -17,7 +20,7 @@ proto:
 .PHONY: $(SERVICES)
 $(SERVICES):
 	go build -o $(BIN)/$(service) $(DIR)/$(service)
-	$(BIN)/$(service) -config $(CONFIG_PATH)
+	$(BIN)/$(service) -config $(CONFIG_PATH) -srvnum=$(node)
 
 .PHONY: env-up
 env-up:

@@ -15,11 +15,18 @@ import (
 	"github.com/ozline/grpc-todolist/idl/pb/experimental"
 )
 
+var (
+	path   *string
+	srvnum *int
+)
+
 func Init() *discovery.Register {
 	// Args
-	path := flag.String("config", "./config", "config path")
+	path = flag.String("config", "./config", "config path")
+	srvnum = flag.Int("srvnum", 0, "node number")
 	flag.Parse()
-	config.Init(*path, srvname)
+
+	config.Init(*path, srvname, *srvnum)
 
 	// etcd
 	register := discovery.NewRegister([]string{config.Etcd.Addr}, logrus.New())
@@ -56,7 +63,7 @@ func main() {
 		s.Stop()
 	})
 
-	log.Printf("%s listening at %v\n", srvname, lis.Addr())
+	log.Printf("%s listening at %v (node number: %d)\n", srvname, lis.Addr(), *srvnum)
 
 	if err = s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
