@@ -16,6 +16,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"time"
 
 	"github.com/ozline/grpc-todolist/idl/pb/experimental"
 )
@@ -31,6 +32,7 @@ func NewExperimentalServiceImpl() *ExperimentalServiceImpl {
 // 普通Unary调用
 // 服务端返回一个响应
 func (es *ExperimentalServiceImpl) Ping(ctx context.Context, req *experimental.Request) (resp *experimental.Response, err error) {
+	log.Printf("receive ping at %s", time.Now().Format("2006-01-02 15:04:05"))
 	resp = &experimental.Response{
 		Pong: "pong",
 	}
@@ -41,7 +43,7 @@ func (es *ExperimentalServiceImpl) Ping(ctx context.Context, req *experimental.R
 // 客户端流式推送到服务端
 // 我们允许客户端发送最多6个消息，然后服务端返回一个响应
 func (es *ExperimentalServiceImpl) ClientStream(stream experimental.ExperimentalService_ClientStreamServer) error {
-
+	log.Printf("receive [ClientStream] request at %s", time.Now().Format("2006-01-02 15:04:05"))
 	msgs := []string{}
 
 	for {
@@ -66,6 +68,7 @@ func (es *ExperimentalServiceImpl) ClientStream(stream experimental.Experimental
 // 服务端流式响应客户端
 // 我们允许客户端发送一个消息，然后服务端返回最多10个响应
 func (es *ExperimentalServiceImpl) ServerStream(req *experimental.Request, stream experimental.ExperimentalService_ServerStreamServer) error {
+	log.Printf("receive [ServerStream] request at %s", time.Now().Format("2006-01-02 15:04:05"))
 	for i := 0; i < 10; i++ {
 		data := &experimental.Response{Pong: fmt.Sprintf("the %dth pong", i)}
 
@@ -81,7 +84,7 @@ func (es *ExperimentalServiceImpl) ServerStream(req *experimental.Request, strea
 // 双向流式通信
 // 我们允许客户端发送任意多个消息，每2个消息服务端将会响应一个消息
 func (es *ExperimentalServiceImpl) BidirectionalStream(stream experimental.ExperimentalService_BidirectionalStreamServer) error {
-
+	log.Printf("receive [BidirectionalStream] request at %s", time.Now().Format("2006-01-02 15:04:05"))
 	msgs := []string{}
 	for {
 		msg, err := stream.Recv()

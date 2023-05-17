@@ -14,6 +14,7 @@ type snowflake struct {
 type service struct {
 	Name string
 	Addr string
+	LB   bool `yaml:"load-balance"`
 }
 
 type mysql struct {

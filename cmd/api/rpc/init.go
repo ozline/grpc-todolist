@@ -3,6 +3,7 @@ package rpc
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/ozline/grpc-todolist/config"
@@ -68,6 +69,13 @@ func connectServer(serviceName string) (conn *grpc.ClientConn, err error) {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
 	addr := fmt.Sprintf("%s:///%s", Register.Scheme(), serviceName)
+
+	// Load balance
+	if config.GetService(serviceName).LB {
+		log.Printf("load balance enabled for %s\n", serviceName)
+		opts = append(opts, grpc.WithDefaultServiceConfig(fmt.Sprintf(`{"LoadBalancingPolicy": "%s"}`, "round_robin")))
+	}
+
 	conn, err = grpc.DialContext(ctx, addr, opts...)
 	return
 }

@@ -22,7 +22,7 @@ func Init(path string, service string, node int) {
 	viper.AddConfigPath(path)
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			log.Println("could not find config files")
+			log.Panicln("could not find config files")
 		} else {
 			log.Panicln("read config error")
 		}
@@ -60,5 +60,6 @@ func GetService(srvname string) *service {
 	return &service{
 		Name: viper.GetString("services." + srvname + ".name"),
 		Addr: addrlist[servnum],
+		LB:   viper.GetBool("services." + srvname + ".load-balance"),
 	}
 }
