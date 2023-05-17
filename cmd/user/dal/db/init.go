@@ -1,8 +1,8 @@
 package db
 
 import (
+	"github.com/ozline/grpc-todolist/config"
 	"github.com/ozline/grpc-todolist/pkg/utils"
-	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
@@ -28,9 +28,9 @@ func Init() {
 		panic(err)
 	}
 
-	DB = DB.Table(viper.GetString("services.user.name"))
+	DB = DB.Table(config.Service.Name)
 
-	SF, err = utils.NewSnowflake(viper.GetInt64("snowflake.worker-id"), viper.GetInt64("snowflake.datancenter-id"))
+	SF, err = utils.NewSnowflake(config.Snowflake.WorkerID, config.Snowflake.DatancenterID)
 
 	if err != nil {
 		panic(err)

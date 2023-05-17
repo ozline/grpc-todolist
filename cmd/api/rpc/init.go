@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/ozline/grpc-todolist/config"
 	"github.com/ozline/grpc-todolist/idl/pb/task"
 	"github.com/ozline/grpc-todolist/idl/pb/user"
 	"github.com/ozline/grpc-todolist/pkg/discovery"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/resolver"
@@ -24,15 +24,20 @@ var (
 	TaskClient task.TaskServiceClient
 )
 
+const (
+	userSrvName = "user"
+	taskSrvName = "task"
+)
+
 func Init() {
-	Register = discovery.NewResolver([]string{viper.GetString("etcd.addr")}, logrus.New())
+	Register = discovery.NewResolver([]string{config.Etcd.Addr}, logrus.New())
 	resolver.Register(Register)
 	ctx, CancelFunc = context.WithTimeout(context.Background(), 3*time.Second)
 
 	defer Register.Close()
 
-	initClient(viper.GetString("services.user.name"), &UserClient)
-	initClient(viper.GetString("services.task.name"), &TaskClient)
+	initClient(config.GetService(userSrvName).Name, &UserClient)
+	initClient(config.GetService(taskSrvName).Name, &TaskClient)
 
 }
 

@@ -10,7 +10,6 @@ import (
 	"github.com/ozline/grpc-todolist/pkg/discovery"
 	"github.com/ozline/grpc-todolist/pkg/utils"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
@@ -21,18 +20,18 @@ func Init() *discovery.Register {
 	// Args
 	path := flag.String("config", "./config", "config path")
 	flag.Parse()
-	config.Init(*path)
+	config.Init(*path, srvname)
 
 	// Dal
 	dal.Init()
 
 	// etcd
-	register := discovery.NewRegister([]string{viper.GetString("etcd.addr")}, logrus.New())
+	register := discovery.NewRegister([]string{config.Etcd.Addr}, logrus.New())
 	// defer register.Stop()
 
 	node := discovery.Server{
-		Name: viper.GetString("services.user.name"),
-		Addr: viper.GetString("services.user.addr"),
+		Name: config.Service.Name,
+		Addr: config.Service.Addr,
 	}
 
 	if _, err := register.Register(node, 10); err != nil {
@@ -45,7 +44,7 @@ func Init() *discovery.Register {
 func main() {
 	register := Init()
 
-	lis, err := net.Listen("tcp", viper.GetString("services.user.addr"))
+	lis, err := net.Listen("tcp", config.Service.Addr)
 
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
@@ -56,12 +55,12 @@ func main() {
 	service.RegisterUserServiceServer(s, NewUserServiceImpl())
 	reflection.Register(s) // Support server reflection
 
-	log.Printf("user listening at %v\n", lis.Addr())
-
 	go utils.ListenSignal(func() {
 		register.Stop()
 		s.Stop()
 	})
+
+	log.Printf("%s listening at %v\n", srvname, lis.Addr())
 
 	if err = s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

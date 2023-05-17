@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/ozline/grpc-todolist/cmd/api/rpc"
 	"github.com/ozline/grpc-todolist/cmd/api/types"
+	"github.com/ozline/grpc-todolist/config"
 	"github.com/ozline/grpc-todolist/idl/pb/user"
 	"github.com/ozline/grpc-todolist/pkg/errno"
 	"github.com/ozline/grpc-todolist/pkg/utils"
@@ -52,7 +53,7 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateToken(user.Id)
+	token, err := utils.GenerateToken(user.Id, config.Server.Secret)
 
 	if err != nil {
 		BuildFailResponse(c, errno.AuthorizationFailError.WithMessage(err.Error()))

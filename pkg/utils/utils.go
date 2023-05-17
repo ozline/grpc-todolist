@@ -3,18 +3,12 @@ package utils
 import (
 	"strings"
 
-	"github.com/spf13/viper"
+	"github.com/ozline/grpc-todolist/config"
 )
 
+// WARNING: please ensure config load successfully
 func GetMysqlDSN() string {
-	host := viper.GetString("mysql.host")
-	port := viper.GetString("mysql.port")
-	database := viper.GetString("mysql.database")
-	username := viper.GetString("mysql.username")
-	password := viper.GetString("mysql.password")
-	charset := viper.GetString("mysql.charset")
-
-	dsn := strings.Join([]string{username, ":", password, "@tcp(", host, ":", port, ")/", database, "?charset=" + charset + "&parseTime=true"}, "")
+	dsn := strings.Join([]string{config.Mysql.Username, ":", config.Mysql.Password, "@tcp(", config.Mysql.Addr, ")/", config.Mysql.Database, "?charset=" + config.Mysql.Charset + "&parseTime=true"}, "")
 
 	return dsn
 }

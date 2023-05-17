@@ -9,14 +9,18 @@ import (
 
 func ListenSignal(f func()) {
 	signalCh := make(chan os.Signal, 5)
+
 	signal.Notify(signalCh, os.Interrupt, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)
-	log.Println("Listening signal...")
-	select {
-	case sig := <-signalCh:
-		{
-			log.Println("stopping service, because received signal:", sig)
+	log.Println("listening signal...")
+
+	for {
+		sig := <-signalCh
+
+		if sig == syscall.SIGQUIT || sig == syscall.SIGTERM || sig == syscall.SIGINT {
+			log.Println("stopping service")
+
 			f()
-			log.Println("service has stopped")
+			log.Println("service stopped")
 			os.Exit(0)
 		}
 	}

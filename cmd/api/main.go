@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"log"
 	"net/http"
 	"time"
 
@@ -10,13 +11,12 @@ import (
 	"github.com/ozline/grpc-todolist/cmd/api/rpc"
 	"github.com/ozline/grpc-todolist/config"
 	"github.com/ozline/grpc-todolist/pkg/utils"
-	"github.com/spf13/viper"
 )
 
 func Init() {
 	path := flag.String("config", "./config", "config path")
 	flag.Parse()
-	config.Init(*path)
+	config.Init(*path, srvname)
 
 	rpc.Init()
 }
@@ -27,7 +27,7 @@ func main() {
 	r := routes.NewRouter()
 
 	server := &http.Server{
-		Addr:           viper.GetString("services.api.addr"),
+		Addr:           config.Service.Addr,
 		Handler:        r,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
@@ -38,9 +38,9 @@ func main() {
 		server.Shutdown(context.TODO())
 	})
 
-	err := server.ListenAndServe()
+	log.Printf("%s listening at %v\n", srvname, server.Addr)
 
-	if err != nil {
+	if err := server.ListenAndServe(); err != nil {
 		panic(err)
 	}
 }
