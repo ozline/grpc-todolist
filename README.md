@@ -17,6 +17,7 @@ make api            # 启动网关
 - `token`: 鉴权
 ### 负载均衡
 这个项目支持轮询(Round-Robin)的负载均衡策略
+
 只需要在`./config/config.yaml`中将`load-balance`设置为`true`便可启用该模块的负载均衡
 ```bash
 make env-up api             # 开发环境与HTTP服务器
