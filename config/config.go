@@ -30,34 +30,20 @@ func Init(path string, service string) {
 }
 
 func configMapping(srv string) {
-
-	Server = &server{
-		Secret:  []byte(viper.GetString("server.jwt-secret")),
-		Version: viper.GetString("server.version"),
-		Name:    viper.GetString("server.name"),
+	c := new(config)
+	if err := viper.Unmarshal(&c); err != nil {
+		log.Fatal(err)
 	}
+	Snowflake = &c.Snowflake
 
-	Snowflake = &snowflake{
-		WorkerID:      viper.GetInt64("snowflake.worker-id"),
-		DatancenterID: viper.GetInt64("snowflake.datancenter-id"),
-	}
+	Server = &c.Server
+	Server.Secret = []byte(viper.GetString("server.jwt-secret"))
 
-	Service = &service{
-		Name: viper.GetString("services." + srv + ".name"),
-		Addr: viper.GetString("services." + srv + ".addr"),
-	}
+	Etcd = &c.Etcd
 
-	Mysql = &mysql{
-		Addr:     viper.GetString("mysql.addr"),
-		Database: viper.GetString("mysql.database"),
-		Username: viper.GetString("mysql.username"),
-		Password: viper.GetString("mysql.password"),
-		Charset:  viper.GetString("mysql.charset"),
-	}
+	Mysql = &c.Mysql
 
-	Etcd = &etcd{
-		Addr: viper.GetString("etcd.addr"),
-	}
+	Service = GetService(srv)
 }
 
 func GetService(srvname string) *service {
