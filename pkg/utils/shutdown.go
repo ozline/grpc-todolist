@@ -10,7 +10,7 @@ import (
 func ListenSignal(f func()) {
 	signalCh := make(chan os.Signal, 5)
 
-	signal.Notify(signalCh, os.Interrupt, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)
+	signal.Notify(signalCh, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)
 	log.Println("listening signal...")
 
 	for {

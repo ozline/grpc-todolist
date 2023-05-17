@@ -7,8 +7,8 @@ type server struct {
 }
 
 type snowflake struct {
-	WorkerID      int64
-	DatancenterID int64
+	WorkerID      int64 `yaml:"worker-id"`
+	DatancenterID int64 `yaml:"datancenter-id"`
 }
 
 type service struct {
@@ -26,4 +26,11 @@ type mysql struct {
 
 type etcd struct {
 	Addr string
+}
+
+type config struct {
+	Server    server
+	Snowflake snowflake
+	Mysql     mysql
+	Etcd      etcd
 }
