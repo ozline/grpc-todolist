@@ -11,7 +11,7 @@
 			"name": "user",
 			"item": [
 				{
-					"name": "Register",
+					"name": "register",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -38,7 +38,7 @@
 					"response": []
 				},
 				{
-					"name": "Login",
+					"name": "login",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -70,7 +70,7 @@
 			"name": "task",
 			"item": [
 				{
-					"name": "Create",
+					"name": "create",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -82,7 +82,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"最后的测试！\",\n    \"content\": \"我想睡觉\"\n}",
+							"raw": "{\n    \"title\": \"test delete\",\n    \"content\": \"我想睡觉\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -103,10 +103,7 @@
 					"response": []
 				},
 				{
-					"name": "GetList",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "getlist",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -116,30 +113,27 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"status\": 0\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{host}}/task/list",
+							"raw": "{{host}}/task/list?status=0",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"task",
 								"list"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "0"
+								}
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete",
+					"name": "delete",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -151,7 +145,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": \"445026251191615488\"\n}",
+							"raw": "{\n    \"id\": 445038104835784704\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -172,7 +166,7 @@
 					"response": []
 				},
 				{
-					"name": "Update",
+					"name": "update",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -199,6 +193,83 @@
 							"path": [
 								"task",
 								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "experimental",
+			"item": [
+				{
+					"name": "ping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/experimental/ping",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"experimental",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "client-stream",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/experimental/client-stream",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"experimental",
+								"client-stream"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "server-stream",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/experimental/server-stream",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"experimental",
+								"server-stream"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bidirectional-stream",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/experimental/bidirectional-stream",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"experimental",
+								"bidirectional-stream"
 							]
 						}
 					},
