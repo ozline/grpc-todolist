@@ -2,8 +2,10 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+
 	"github.com/ozline/grpc-todolist/cmd/api/rpc"
 	"github.com/ozline/grpc-todolist/cmd/api/types"
+	"github.com/ozline/grpc-todolist/consts"
 	"github.com/ozline/grpc-todolist/idl/pb/task"
 	"github.com/ozline/grpc-todolist/pkg/errno"
 )
@@ -19,7 +21,7 @@ func TaskCreate(c *gin.Context) {
 	}
 
 	resp, err := rpc.TaskCreate(c, &task.CreateRequest{
-		UserId:  c.GetInt64("userid"),
+		UserId:  c.GetInt64(consts.KeyUserId),
 		Title:   req.Title,
 		Content: req.Content,
 	})
@@ -43,7 +45,7 @@ func TaskList(c *gin.Context) {
 	}
 
 	resp, err := rpc.TaskGetList(c, &task.GetListRequest{
-		UserId: c.GetInt64("userid"),
+		UserId: c.GetInt64(consts.KeyUserId),
 		Status: *req.Status,
 	})
 
