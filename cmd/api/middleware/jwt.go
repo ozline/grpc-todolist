@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/ozline/grpc-todolist/cmd/api/handler"
 	"github.com/ozline/grpc-todolist/config"
 	"github.com/ozline/grpc-todolist/pkg/errno"
@@ -12,7 +13,7 @@ import (
 
 const (
 	authHeader = "Authorization"
-	key        = "userid"
+	key        = "userId"
 )
 
 func JWT(c *gin.Context) {
