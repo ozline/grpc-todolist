@@ -4,15 +4,12 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/ozline/grpc-todolist/cmd/api/handler"
 	"github.com/ozline/grpc-todolist/config"
+	"github.com/ozline/grpc-todolist/consts"
 	"github.com/ozline/grpc-todolist/pkg/errno"
 	"github.com/ozline/grpc-todolist/pkg/utils"
-)
-
-const (
-	authHeader = "Authorization"
-	key        = "userid"
 )
 
 func JWT(c *gin.Context) {
@@ -20,7 +17,7 @@ func JWT(c *gin.Context) {
 	var claims *utils.Claims
 	var err error
 
-	token := c.GetHeader(authHeader)
+	token := c.GetHeader(consts.AuthHeader)
 	if token == "" {
 		respErr = errno.AuthorizationFailError
 	} else {
@@ -45,8 +42,8 @@ func JWT(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	c.Header(authHeader, token)
-	c.Set(key, claims.UserID)
+	c.Header(consts.AuthHeader, token)
+	c.Set(consts.KeyUserId, claims.UserID)
 
 	c.Next()
 }
