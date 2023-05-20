@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/ozline/grpc-todolist/cmd/task/dal"
 	"github.com/ozline/grpc-todolist/config"
 	"github.com/ozline/grpc-todolist/pkg/discovery"
 	"github.com/ozline/grpc-todolist/pkg/utils"
@@ -27,6 +28,7 @@ func Init() *discovery.Register {
 	flag.Parse()
 
 	config.Init(*path, srvname, *srvnum)
+	dal.Init()
 
 	// etcd
 	register := discovery.NewRegister([]string{config.Etcd.Addr}, logrus.New())
