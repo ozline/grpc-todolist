@@ -17,7 +17,7 @@ func Create(ctx context.Context, req *task.CreateRequest) (*model.Task, error) {
 		Content: req.Content,
 	}
 
-	err := DB.Create(info).Error
+	err := DB.Table(config.Service.Name).Create(info).Error
 
 	if err != nil {
 		return nil, err
