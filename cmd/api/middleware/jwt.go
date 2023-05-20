@@ -1,8 +1,6 @@
 package middleware
 
 import (
-	"time"
-
 	"github.com/gin-gonic/gin"
 
 	"github.com/ozline/grpc-todolist/cmd/api/handler"
@@ -13,24 +11,19 @@ import (
 )
 
 func JWT(c *gin.Context) {
-	var respErr = errno.Success
 	var claims *utils.Claims
 	var err error
 
 	token := c.GetHeader(consts.AuthHeader)
 	if token == "" {
-		respErr = errno.AuthorizationFailError
-	} else {
-		claims, err = utils.ParseToken(token, config.Server.Secret)
-		if err != nil {
-			respErr = errno.AuthorizationFailError
-		} else if time.Now().Unix() > claims.ExpiresAt {
-			respErr = errno.AuthorizationExpiredError
-		}
+		handler.BuildFailResponse(c, errno.AuthorizationFailError)
+		c.Abort()
+		return
 	}
 
-	if respErr != errno.Success {
-		handler.BuildFailResponse(c, respErr)
+	claims, err = utils.ParseToken(token, config.Server.Secret)
+	if err != nil {
+		handler.BuildFailResponse(c, err)
 		c.Abort()
 		return
 	}
@@ -38,7 +31,7 @@ func JWT(c *gin.Context) {
 	token, err = utils.GenerateToken(claims.UserID, config.Server.Secret)
 
 	if err != nil {
-		handler.BuildFailResponse(c, errno.AuthorizationFailError.WithMessage(err.Error()))
+		handler.BuildFailResponse(c, errno.NewErrNo(errno.AuthorizationFailedErrCode, err.Error()))
 		c.Abort()
 		return
 	}
