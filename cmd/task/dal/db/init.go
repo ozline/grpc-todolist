@@ -28,8 +28,6 @@ func Init() {
 		panic(err)
 	}
 
-	DB = DB.Table(config.Service.Name)
-
 	SF, err = utils.NewSnowflake(config.Snowflake.WorkerID, config.Snowflake.DatancenterID)
 
 	if err != nil {

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/ozline/grpc-todolist/cmd/task/model"
+	"github.com/ozline/grpc-todolist/config"
 	"github.com/ozline/grpc-todolist/idl/pb/task"
 )
 
@@ -27,7 +28,7 @@ func Create(ctx context.Context, req *task.CreateRequest) (*model.Task, error) {
 
 func Delete(ctx context.Context, req *task.DeleteRequest) error {
 
-	err := DB.Where("id = ?", req.Id).Unscoped().Delete(&model.Task{}).Error
+	err := DB.Table(config.Service.Name).Where("id = ?", req.Id).Unscoped().Delete(&model.Task{}).Error
 
 	if err != nil {
 		return err
@@ -38,7 +39,7 @@ func Delete(ctx context.Context, req *task.DeleteRequest) error {
 
 func Update(ctx context.Context, req *task.UpdateRequest) (*model.Task, error) {
 	var info *model.Task
-	err := DB.Where("id = ?", req.Id).First(&info).Error
+	err := DB.Table(config.Service.Name).Where("id = ?", req.Id).First(&info).Error
 
 	if err != nil {
 		return nil, err
@@ -48,7 +49,7 @@ func Update(ctx context.Context, req *task.UpdateRequest) (*model.Task, error) {
 	info.Title = req.Title
 	info.Status = req.Status
 
-	err = DB.Save(info).Error
+	err = DB.Table(config.Service.Name).Save(info).Error
 
 	if err != nil {
 		return nil, err
@@ -60,7 +61,7 @@ func Update(ctx context.Context, req *task.UpdateRequest) (*model.Task, error) {
 func GetList(ctx context.Context, req *task.GetListRequest) ([]*model.Task, error) {
 	var list []*model.Task
 
-	err := DB.Where("user_id = ? and status = ?", req.UserId, req.Status).Find(&list).Error
+	err := DB.Table(config.Service.Name).Where("user_id = ? and status = ?", req.UserId, req.Status).Find(&list).Error
 
 	if err != nil {
 		return nil, err
