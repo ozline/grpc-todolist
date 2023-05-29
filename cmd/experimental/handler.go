@@ -61,6 +61,7 @@ func (es *ExperimentalServiceImpl) ClientStream(stream experimental.Experimental
 			return err
 		}
 
+		stream.SendMsg(&experimental.Response{Pong: "Maxnum pings is 6, enough!"})
 		msgs = append(msgs, msg.Ping)
 	}
 }

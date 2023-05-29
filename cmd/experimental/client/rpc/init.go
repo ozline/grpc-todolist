@@ -22,14 +22,10 @@ var (
 	ctx        context.Context
 	CancelFunc context.CancelFunc
 
-	UserClient         user.UserServiceClient
-	TaskClient         task.TaskServiceClient
 	ExperimentalClient experimental.ExperimentalServiceClient
 )
 
 const (
-	userSrvName         = "user"
-	taskSrvName         = "task"
 	experimentalSrvName = "experimental"
 )
 
@@ -40,8 +36,6 @@ func Init() {
 
 	defer Register.Close()
 
-	initClient(config.GetService(userSrvName).Name, &UserClient)
-	initClient(config.GetService(taskSrvName).Name, &TaskClient)
 	initClient(config.GetService(experimentalSrvName).Name, &ExperimentalClient)
 }
 

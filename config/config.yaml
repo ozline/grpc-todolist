@@ -10,7 +10,7 @@ snowflake:
 services:
   api:
     name: api
-    load-balance: true
+    load-balance: false
     addr:
       - 127.0.0.1:10001
   user:
