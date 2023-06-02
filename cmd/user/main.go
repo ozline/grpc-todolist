@@ -14,6 +14,8 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	service "github.com/ozline/grpc-todolist/idl/pb/user"
+
+	_ "github.com/apache/skywalking-go"
 )
 
 var (

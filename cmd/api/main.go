@@ -11,6 +11,8 @@ import (
 	"github.com/ozline/grpc-todolist/cmd/api/rpc"
 	"github.com/ozline/grpc-todolist/config"
 	"github.com/ozline/grpc-todolist/pkg/utils"
+
+	_ "github.com/apache/skywalking-go"
 )
 
 var (

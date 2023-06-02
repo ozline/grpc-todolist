@@ -13,6 +13,8 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/ozline/grpc-todolist/idl/pb/experimental"
+
+	_ "github.com/apache/skywalking-go"
 )
 
 var (

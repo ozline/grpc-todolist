@@ -155,6 +155,7 @@ req    resp                            │                                   res
 make env-up         # 启动环境
 make env-down       # 结束环境
 make proto          # 更新protoc
+make agent          # 编译skywalking-go的代理
 make user           # 启动用户摸块
 make task           # 启动任务模块
 make experimental   # 启动实验模块
