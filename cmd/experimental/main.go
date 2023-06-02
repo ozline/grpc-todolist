@@ -16,8 +16,9 @@ import (
 )
 
 var (
-	path   *string
-	srvnum *int
+	path    *string
+	srvnum  *int
+	srvname = "experimental"
 )
 
 func Init() *discovery.Register {

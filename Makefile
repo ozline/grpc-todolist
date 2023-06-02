@@ -1,15 +1,44 @@
-DIR = $(shell pwd)/cmd
+DIR = $(shell pwd)
+CMD = $(DIR)/cmd
+CONFIG_PATH = $(DIR)/config
+IDL_PATH = $(DIR)/idl
 
-CONFIG_PATH = $(shell pwd)/config
-IDL_PATH = $(shell pwd)/idl
 
+# options: amd64 arm64
+ARCH = arm64
+
+# options: linux darwin windows
+OS = darwin
+
+# define the service names, these names are the same as the folder names inside the cmd directory
 SERVICES := api user task experimental
 service = $(word 1, $@)
 
-# node is the node number of the service
+# define the current node number
 node = 0
 
-BIN = $(shell pwd)/bin
+# define the bin path
+BIN = $(DIR)/bin
+
+# Skywalking-go agent
+BINARY = skywalking-go-agent
+TOOLS_PATH = $(DIR)/tools
+AGENT_SOURCE_PATH = $(DIR)/skywalking-go/tools/go-agent
+AGENT_PATH = $(TOOLS_PATH)/$(BINARY)-$(VERSION)-$(OS)-$(ARCH)
+AGENT_CONFIG = $(DIR)/config/agent/agent.yaml
+
+# go settings
+GO = go
+GO_BUILD = $(GO) build
+GO_BUILD_FLAGS = -v
+GO_BUILD_LDFLAGS = -X main.version=$(VERSION)
+
+.PHONY: agent
+agent:
+	cd $(AGENT_SOURCE_PATH) && make deps
+	cd $(AGENT_SOURCE_PATH) && \
+	GOOS=$(OS) GOARCH=$(ARCH) $(GO_BUILD) $(GO_BUILD_FLAGS) -ldflags "$(GO_BUILD_LDFLAGS)" -o $(TOOLS_PATH)/$(BINARY)-$(VERSION)-$(OS)-$(ARCH) ./cmd
+
 
 .PHONY: proto
 proto:
@@ -22,7 +51,10 @@ proto:
 
 .PHONY: $(SERVICES)
 $(SERVICES):
-	go build -o $(BIN)/$(service) $(DIR)/$(service)
+	$(GO_BUILD) \
+	-o $(BIN)/$(service) \
+	-toolexec="$(AGENT_PATH) -config $(AGENT_CONFIG)" \
+	$(CMD)/$(service)
 	$(BIN)/$(service) -config $(CONFIG_PATH) -srvnum=$(node)
 
 .PHONY: env-up

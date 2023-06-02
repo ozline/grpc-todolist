@@ -1,0 +1,35 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "exp-client",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${file}",
+            "args": [
+                "-config",
+                "../../../config"
+            ],
+            "env": {
+                "GRPC_GO_LOG_VERBOSITY_LEVEL": "99",
+                "GRPC_GO_LOG_SEVERITY_LEVEL": "info",
+            }
+        },
+        {
+            "name": "exp-server",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${fileDirname}",
+            "args": [
+                "-config=../../config",
+                "-srvnum=0",
+            ],
+            "env": {
+                "GRPC_GO_LOG_VERBOSITY_LEVEL": "99",
+                "GRPC_GO_LOG_SEVERITY_LEVEL": "info",
+            }
+        },
+    ]
+}

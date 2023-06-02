@@ -3,10 +3,20 @@
 ## 运行
 ```bash
 make env-up         # 启动环境
+make agent          # 编译Agent二进制文件
 make user           # 启动用户摸块
 make task           # 启动任务模块
 make experimental   # 启动实验性模块
 make api            # 启动网关
+```
+本项目接入了[skywalking-go](https://github.com/apache/skywalking-go)，如果不打算使用skywalking，可以不执行上述命令中的`make agent`，同时请在`Makefile`中删除如下内容
+```makefile
+$(SERVICES):
+	$(GO_BUILD) \
+	-o $(BIN)/$(service) \
+	-toolexec="$(AGENT_PATH) -config $(AGENT_CONFIG)" \     # 删除此行
+	$(CMD)/$(service)
+	$(BIN)/$(service) -config $(CONFIG_PATH) -srvnum=$(node)
 ```
 
 ## 测试
